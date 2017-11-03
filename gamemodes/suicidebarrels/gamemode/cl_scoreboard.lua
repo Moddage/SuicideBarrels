@@ -182,9 +182,14 @@ function GM:HUDDrawScoreBoard()
 
 	surface.SetTextColor( 255, 255, 255, 255 )
 	surface.SetFont( "DermaDefault" )
-	surface.SetTextPos(xOffset + (boardWidth / 0.96) - (txWidth/2), y + 7)
+	surface.SetTextPos(xOffset + (boardWidth / 0.96) - (txWidth/2), y + -7)
 	surface.DrawText( "and Updated by Zephruz" )
 	
+		surface.SetTextColor( 255, 255, 255, 255 )
+	surface.SetFont( "DermaDefault" )
+	surface.SetTextPos(xOffset + (boardWidth / 0.96) - (txWidth/2), y + 7)
+	surface.DrawText( "with fixes from Moddage" )
+
 	y = y + txHeight + 4
 	GAMEMODE.ScoreDesign.HeaderY = y - yOffset
 	
