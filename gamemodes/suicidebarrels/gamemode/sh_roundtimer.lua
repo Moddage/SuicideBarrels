@@ -4,8 +4,6 @@ timer.Create( "test", 1, 0, function()
 	convar1=GetConVar("sb_roundtime")
 convar2=GetConVar("sb_minplayers")
 convar3=GetConVar("sb_breaktime")
-convar3n=convar3:GetString()
-convar2n=convar2:GetInt()
 end )
 -- Config
 barrelKillScore = 3 -- How many points a Barrel gets for killing a Human.
