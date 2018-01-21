@@ -1,7 +1,8 @@
 TEAM_HUMANS  = 1
 TEAM_BARRELS = 2
 TEAM_SPECTATOR = 3
-
+CreateConVar("sb_kleiner", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
+CreateConVar("sb_ammodisplay", "0", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
 --DeriveGamemode( "fretta" )
 
 team.SetUp( TEAM_HUMANS, "Humans", Color(255, 200, 50, 255))
@@ -37,14 +38,20 @@ GM.Help		= "Humans: Watch out for moving barrels!\nBarrels: Destroy all humans! 
    Return true if this player should take damage from this attacker
 ---------------------------------------------------------*/
 function GM:PlayerShouldTakeDamage( victim, attacker )
-	if victim:Team() then 
 
-	if( victim:Team( )== 1 ) and ( attacker:Team( )== 1 )	and ( attacker != ply ) then
+	--[[if victim:Team() and attacker:Team() then 
+
+	if( victim:Team( )== 1 ) and ( attacker:Team( )== 1 ) and attacker:Alive()	and ( attacker != ply ) then
 		return false
 	elseif ( victim:Team( )== 3) then
 		return false
 	else
 		return true
+	end
+end]]
+if victim:IsPlayer() and attacker:IsPlayer() then
+if victim:Team() == attacker:Team() then return false
+	else return true
 	end
 end
 end
@@ -63,10 +70,11 @@ end
 function GM:ContextScreenClick( aimvec, mousecode, pressed, ply )
 	
 	// We don't want to do anything by default, just feed it to the weapon
+	local wep = ""
 	local wep = ply:GetActiveWeapon()
-	if (wep:IsValid()) then
+	if wep:IsValid() then
 		local weptab = wep:GetTable()
-		if (weptab.ContextScreenClick != nil) then
+		if weptab.ContextScreenClick != nil and wep:IsValid() then
 			weptab:ContextScreenClick( aimvec, mousecode, pressed, ply )
 		end
 	end

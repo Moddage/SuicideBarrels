@@ -1,10 +1,7 @@
 round = {}
+local roundtime = CreateConVar("sb_roundtime", "120", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
+local breaktime = CreateConVar("sb_breaktime", "15", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
 
-timer.Create( "test", 1, 0, function()
-	convar1=GetConVar("sb_roundtime")
-convar2=GetConVar("sb_minplayers")
-convar3=GetConVar("sb_breaktime")
-end )
 -- Config
 barrelKillScore = 3 -- How many points a Barrel gets for killing a Human.
 humanKillScore = 1 -- How many points a Human gets for killing a Barrel.
@@ -12,6 +9,7 @@ humanKillScore = 1 -- How many points a Human gets for killing a Barrel.
 -- Timing (In seconds)
 round.WarnTime = 10 -- The interval at which it warns the players that there is 10 seconds left.
 --test
+--120
 round.Time	= 120 -- 2 minute rounds Default
 --round.MinPlayers = 1
 round.Break	= 15	-- 15 second breaks Default
@@ -24,9 +22,9 @@ round.Breaking = false
 round.Active = false
 round.EnblEnd = true
 
+--print(roundtime:GetInt())
 
-
-
+--print("nothing")
 
 if CLIENT then
 	surface.CreateFont( "RoundFont", {
@@ -45,15 +43,12 @@ end
 
 function enoughPlayers()
 	local numPlayers = 0
-if convar2 == nil then
 
-else
-
-	if table.Count(player.GetAll()) >= convar2:GetInt() then
+	if table.Count(player.GetAll()) >= 1 then
 		if SERVER then		
 			for k, v in pairs(player.GetAll()) do
 				if IsValid(v) then
-					v:PrintMessage(HUD_PRINTCENTER, "Round started! You have " .. math.Round(round.Time/60) .. " minutes!")
+					v:PrintMessage(HUD_PRINTCENTER, "Round started! You have " .. math.Round(GetConVar("sb_roundtime"):GetInt()/60) .. " minutes!")
 					v:SetTeam(TEAM_HUMANS)
 					v:Spawn()
 					v:StripWeapon("sb_barrelsuicider")
@@ -65,12 +60,12 @@ else
 			randomply:SetTeam(TEAM_BARRELS)
 			randomply:Spawn()
 			randomply:StripWeapon("sb_barrelslayer")
-			randomply:PrintMessage(HUD_PRINTCENTER, "Round started! You are a Barrel! You have " .. math.Round(round.Time/60) .. " minutes to eliminate the humans!")
+			randomply:PrintMessage(HUD_PRINTCENTER, "Round started! You are a Barrel! You have " .. math.Round(GetConVar("sb_roundtime"):GetInt()/60) .. " minutes to eliminate the humans!")
 		end
-		round.TimeLeft = round.Time
+		round.TimeLeft = GetConVar("sb_roundtime"):GetInt()
 		round.Active = true
 		round.RoundCur = round.RoundCur + 1
-	elseif table.Count(player.GetAll()) < convar2:GetInt() then
+	elseif table.Count(player.GetAll()) < 1 then
 		if SERVER then
 			for k, v in pairs(player.GetAll()) do
 				if IsValid(v) then
@@ -81,7 +76,7 @@ else
 		round.Active = false
 	end
 end
-end
+
 
 function round.Begin()
 	enoughPlayers()
@@ -91,13 +86,13 @@ function round.End()
 	if SERVER then
 		if (team.NumPlayers (TEAM_HUMANS)) >= 1 then
 			for k, v in pairs(player.GetAll()) do
-			 v:PrintMessage(HUD_PRINTCENTER, "Humans Win! Next round in " .. round.Break .. " seconds!")
+			 v:PrintMessage(HUD_PRINTCENTER, "Humans Win! Next round in " .. GetConVar("sb_breaktime"):GetInt() .. " seconds!")
 			 v:KillSilent()
 			 v:SetTeam(TEAM_SPECTATOR)
 			end
 		elseif (team.NumPlayers (TEAM_HUMANS)) < 1 or nil then
 			for k, v in pairs(player.GetAll()) do
-			 v:PrintMessage(HUD_PRINTCENTER, "Barrels Win! Next round in " .. round.Break .. " seconds!")
+			 v:PrintMessage(HUD_PRINTCENTER, "Barrels Win! Next round in " .. GetConVar("sb_breaktime"):GetInt() .. " seconds!")
 			 v:KillSilent()
 			 v:SetTeam(TEAM_SPECTATOR)
 			end
@@ -110,7 +105,7 @@ function round.End()
 		round.BarrelWins = round.BarrelWins + 1
 	end
 	
-	round.TimeLeft = round.Break
+	round.TimeLeft = GetConVar("sb_breaktime"):GetInt()
 	round.Active = false
 end
 
@@ -150,10 +145,7 @@ if not seconds then seconds = 0 end
 end
  
 function WinTest()
-	if convar2 == nil then
-
-	else
-	if table.Count(player.GetAll()) >= convar2:GetInt() then
+	if table.Count(player.GetAll()) >= 1 then
 		if (team.NumPlayers (TEAM_HUMANS)) < 1 and round.Breaking == false and round.Active == true then
 			round.End()
 			round.EnblEnd = true
@@ -161,26 +153,23 @@ function WinTest()
 			return
 		end
 	end
-end
+
 end
 hook.Add("Think", "WinTesting", WinTest)
 
 function round.IsActive()
-if convar2 == nil then
 
-else
 
 	if round.Breaking == false and round.Active == true then
 		return "Round Active"
 	elseif round.Breaking == true and round.Active == false then
 		return "Round Over"
-	elseif round.Active == false and table.Count(player.GetAll()) < convar2:GetInt() then
+	elseif round.Active == false and table.Count(player.GetAll()) < 1 then
 		return "Not Enough Players"
 	elseif round.EnblEnd == true then
 		return "Round Over"
 	else
 		return "Refreshing"
-	end
 end
 end
 

@@ -19,16 +19,14 @@ include( 'sh_roundtimer.lua' )
 
 
 /*---------------------------------------------------------
-MODDAGE TIME BABY!
+n0st4lg1c
 ---------------------------------------------------------*/
-CreateConVar("sb_minplayers", "2", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
-CreateConVar("sb_roundtime", "120", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
-CreateConVar("sb_breaktime", "15", FCVAR_ARCHIVE + FCVAR_NOTIFY + FCVAR_REPLICATED)
+
 /*---------------------------------------------------------
    Name: gamemode:DoPlayerDeath( )
    Desc: Carries out actions when the player dies 		 
 ---------------------------------------------------------*/
-function GM:DoPlayerDeath( ply, attacker, dmginfo )
+function GM:DoPlayerDeath( ply, attacker, dmginfo ) 
 
 	if ( ply:Team() == TEAM_BARRELS or ply:Team() == TEAM_HUMANS ) then
 		ply:CreateRagdoll()

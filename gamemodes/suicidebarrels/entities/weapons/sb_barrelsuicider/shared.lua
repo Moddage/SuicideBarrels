@@ -67,12 +67,20 @@ function SWEP:PrimaryAttack()
 	// Make an explosion at your position
 	self.Owner.KeyOnce = true
 	
-	if IsValid(self.Owner) then
-		if self.Owner:Alive() then
+	if self then
+		
 				self.Owner:SetHealth(1)
+				self.Owner:GodEnable()
+				if self then 
 				timer.Simple( .1, function() if self.Owner:Alive() and IsValid(self.Owner) then self.Owner:EmitSound( "Grenade.Blip" ) end end )
+				end
+				if self then 
 				timer.Simple( .6, function() if self.Owner:Alive() and IsValid(self.Owner) then self.Owner:EmitSound( "Grenade.Blip" ) end end )
+				end
+				if self then 
 				timer.Simple( 1.1, function() if self.Owner:Alive() and IsValid(self.Owner) then self.Owner:EmitSound( "Weapon_CombineGuard.Special1" ) end end )
+				end
+				if self then 
 				timer.Simple( 1.5, function() if self.Owner:Alive() and IsValid(self.Owner) then 
 				local ent = ents.Create( "env_explosion" )
 				ent:SetPos( self.Owner:GetPos() )
@@ -80,12 +88,14 @@ function SWEP:PrimaryAttack()
 				ent:Spawn()
 				ent:SetKeyValue( "iMagnitude", "150" )
 				ent:Fire( "Explode", 0, 0 )
+				self.Owner:GodDisable()
 				self.Owner:Kill() 
 				self.Owner:ViewPunch( Angle( -3, 0, 0 ) )
 			end end )
+			end
 		elseif !self.Owner:Alive() then
 			return
-		end
+		
 	end
 
 end

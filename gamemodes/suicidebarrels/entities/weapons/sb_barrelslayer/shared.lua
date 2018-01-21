@@ -11,7 +11,7 @@ SWEP.AdminSpawnable		= true		// Spawnable in singleplayer or by server admins
 
 SWEP.ViewModel			= "models/weapons/v_pistol.mdl"
 SWEP.WorldModel			= "models/weapons/w_pistol.mdl"
-
+SWEP.UseHands = false
 SWEP.Primary.Sound			= Sound( "Weapon_Pistol.Single" )
 SWEP.Primary.Sound			= "Weapon_Pistol.Single"
 SWEP.Primary.ClipSize		= 1
@@ -19,6 +19,7 @@ SWEP.Primary.DefaultClip	= 999
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "pistol"
 SWEP.Primary.Damage   		= 100
+
 
 SWEP.Secondary.ClipSize		= -1
 SWEP.Secondary.DefaultClip	= -1
@@ -43,6 +44,30 @@ end
 /*---------------------------------------------------------
 	PrimaryAttack
 ---------------------------------------------------------*/
+function SWEP:CustomAmmoDisplay()
+	self.AmmoDisplay = self.AmmoDisplay or {}
+
+if GetConVar("sb_ammodisplay"):GetInt() == 0 then
+	self.AmmoDisplay.Draw = false //draw the display?
+elseif GetConVar("sb_ammodisplay"):GetInt() == 1 then
+	self.AmmoDisplay.Draw = true
+	elseif GetConVar("sb_ammodisplay"):GetInt() == 2 then
+		self.AmmoDisplay.Draw = true
+
+end
+
+	if self.Primary.ClipSize > 0 then
+		self.AmmoDisplay.PrimaryClip = self:Clip1() //amount in clip
+		self.AmmoDisplay.PrimaryAmmo = self:Ammo1() //amount in reserve
+	end
+	if self.Secondary.ClipSize > 0 then
+		self.AmmoDisplay.SecondaryClip = self:Clip2()
+		self.AmmoDisplay.SecondaryAmmo = self:Ammo2()
+	end
+
+	return self.AmmoDisplay //return the table
+end
+
 function SWEP:PrimaryAttack()
 	if ( !self:CanPrimaryAttack() ) then return end
 	
@@ -59,6 +84,7 @@ end
 
 
 function SWEP:Reload()
+		if self then
 	if self.ReloadingTime and CurTime() <= self.ReloadingTime then return end
  
 	if ( self:Clip1() < self.Primary.ClipSize and self.Owner:GetAmmoCount( self.Primary.Ammo ) > 0 ) then
@@ -68,14 +94,26 @@ function SWEP:Reload()
                 self.ReloadingTime = CurTime() + AnimationTime
                 self:SetNextPrimaryFire(CurTime() + AnimationTime)
                 self:SetNextSecondaryFire(CurTime() + AnimationTime)
-		
+		if IsMounted( 'cstrike' ) then
+			if self then
 		timer.Simple(0.3,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_clipout.wav") else end end)
-		timer.Simple(0.5,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_clipin.wav") else end end)
-		timer.Simple(0.5,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_slideback.wav") else end end)
-		timer.Simple(0.7,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_sliderelease.wav") else end end)
- 
 	end
-	
+	if self then
+		timer.Simple(0.5,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_clipin.wav") else end end)
+	end
+	if self then
+		timer.Simple(0.5,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_slideback.wav") else end end)
+	end
+	if self then
+		timer.Simple(0.7,function() if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/glock/glock_sliderelease.wav") else end end)
+	end
+ 		else
+ 			if self then
+if self.Owner:IsValid() then self.Weapon:EmitSound("weapons/pistol/pistol_reload1.wav") else end
+end
+ 		end
+	end
+	end
 end
 
 

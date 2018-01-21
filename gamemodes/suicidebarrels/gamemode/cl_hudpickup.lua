@@ -18,7 +18,7 @@ function GM:HUDWeaponPickedUp( wep )
 	pickup.time 		= CurTime()
 	pickup.name 		= wep:GetPrintName()
 	pickup.holdtime 	= 5
-	pickup.font 		= "DefaultBold"
+	pickup.font 		= "Default"
 	pickup.fadein		= 0.04
 	pickup.fadeout		= 0.3
 	pickup.color		= Color( 255, 200, 50, 255 )
@@ -60,7 +60,7 @@ function GM:HUDItemPickedUp( itemname )
 	pickup.time 		= CurTime()
 	pickup.name 		= "#"..itemname;
 	pickup.holdtime 	= 5
-	pickup.font 		= "DefaultBold"
+	pickup.font 		= "Default"
 	pickup.fadein		= 0.04
 	pickup.fadeout		= 0.3
 	pickup.color		= Color( 180, 255, 180, 255 )
@@ -109,7 +109,7 @@ function GM:HUDAmmoPickedUp( itemname, amount )
 	pickup.time 		= CurTime()
 	pickup.name 		= "#"..itemname.."_ammo";
 	pickup.holdtime 	= 5
-	pickup.font 		= "DefaultBold"
+	pickup.font 		= "Default"
 	pickup.fadein		= 0.04
 	pickup.fadeout		= 0.3
 	pickup.color		= Color( 180, 200, 255, 255 )

@@ -268,6 +268,7 @@ function GM:PlayerSpawn( pl )
 	GAMEMODE:PlayerLoadout( pl )
 	
 	// Set player model
+
 	GAMEMODE:PlayerSetModel( pl )
 	
 end
@@ -295,25 +296,45 @@ function GM:PlayerSetModel( pl )
 	elseif ( pl:Team()== TEAM_SPECTATOR ) then
 		return
 	elseif ( pl:Team() == TEAM_HUMANS ) then
+		if GetConVar("sb_kleiner"):GetInt() == 0 then
 	util.PrecacheModel( table.Random( playerModels ))
 	pl:SetModel( table.Random( playerModels ) )
+	local color = Color( 61, 87, 105 )
+	pl:SetPlayerColor(  Vector( color.r/255, color.g/255, color.b/255 ) )
+elseif GetConVar("sb_kleiner"):GetInt() == 1 then
+	util.PrecacheModel( "models/player/kleiner.mdl")
+	util.PrecacheModel( "models/kleiner.mdl")
+	pl:SetModel( "models/player/kleiner.mdl" )
+	pl:SetPlayerColor( Vector( 255, 255, 255 ) )
+end
 	end
 end
 
 /*---------------------------------------------------------
    Name: gamemode:PlayerLoadout( )
-   Desc: Give the player the default spawning weapons/ammo
+   Desc: Give the player the default spawning weapons/ammo 
 ---------------------------------------------------------*/
-function GM:PlayerLoadout( pl )
-	
+function GM:PlayerLoadout( pl ) 
+	local mingebag = GetConVar("sb_kleiner")
+	local kleiner = mingebag:GetInt()
+--	print(kleiner)
 	if ( pl:Team() == TEAM_BARRELS ) then
 	pl:Give( "sb_barrelsuicider" )
-	pl:SetRunSpeed(320)
+	pl:StripWeapon( "sb_barrelslayer" )
+	pl:StripWeapon( "sb_barrelslayer_revolver" )
+	pl:SetRunSpeed(320)   
 	pl:SetDuckSpeed(0.4)
 	pl:SetWalkSpeed(220)
 	elseif (pl:Team() == TEAM_HUMANS ) then
+			pl:StripWeapon( "sb_barrelslayer" )
+	pl:StripWeapon( "sb_barrelslayer_revolver" )
+		if kleiner == 1 and pl:Team() == TEAM_HUMANS then
+	pl:Give( "sb_barrelslayer_revolver" )
+	pl:GiveAmmo( 999, "pistol", true )
+elseif kleiner == 0 and pl:Team() == TEAM_HUMANS  then
 	pl:Give( "sb_barrelslayer" )
 	pl:GiveAmmo( 999, "pistol", true )
+end 
 	else
 	pl:Spectate( OBS_MODE_ROAMING )
 	end
@@ -331,7 +352,7 @@ function GM:CanPlayerSuicide( pl )
 	if ( pl:Team() == TEAM_HUMANS or pl:Team() == TEAM_SPECTATOR ) then
 		return false
 	else
-		return true
+		return false
 	end
 end
 
