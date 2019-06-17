@@ -25,10 +25,10 @@ This gamemode comes bundled with 20 maps:
 
 If you can't see these maps, that's because they're located in the "Spacebuild" category.
 # Changes
-Team spawn bug fixed  
-Optional sb_minplayers command  
-WIP sb_roundtime and sb_breaktime commands  
-PlayerShouldTakeDamage fixed  
+* Team spawn bug fixed  
+* Optional sb_minplayers command  
+* WIP sb_roundtime and sb_breaktime commands  
+* PlayerShouldTakeDamage fixed  
 # Credits
 Credit goes to sean/Heyo for making the original gamemode for GMod 9 and the updated version for GMod 10, Zephruz for porting and rescripting the gamemode for GMod 13, and special thanks to LeadKiller for helping fix even more!
 # Workshop Link
